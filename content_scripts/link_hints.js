@@ -915,7 +915,9 @@ var LocalHints = {
     } else if (((contentEditable = element.getAttribute("contentEditable")) != null) &&
                ["", "contenteditable", "true"].includes(contentEditable.toLowerCase())) {
       isClickable = true;
-    }
+    } else if (element.className === "yui-dt-liner"){
+      isClickable = true;
+    } 
 
     // Check for jsaction event listeners on the element.
     if (!isClickable && element.hasAttribute("jsaction")) {
@@ -990,6 +992,14 @@ var LocalHints = {
     const className = element.getAttribute("class");
     if (!isClickable && className && className.toLowerCase().includes("button"))
       possibleFalsePositive = isClickable = true;
+
+    const classCheckList = ['ygtvcontent', 'ygtvlabel'];
+    for (let i = 0; i < classCheckList.length; i++) {
+      const currentClassCheck = classCheckList[i];
+      if (!isClickable && className && className.includes(currentClassCheck)) {
+        isClickable = true;
+      } 
+    }
 
     // Elements with tabindex are sometimes useful, but usually not. We can treat them as second class
     // citizens when it improves UX, so take special note of them.
